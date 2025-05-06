@@ -1,0 +1,40 @@
+{
+	"sequence":[
+		{
+			"action": "PathFinding",
+			"target_path": "Keys/Key1", 
+			"conditions": [
+				{
+					"action" : "inventory",
+					"item": "Key",
+					"amount": 1
+				}
+			
+			] 
+		},
+		{
+			"action": "PathFinding",
+			"target_path": "Keys/Key2", 
+			"conditions": [
+				{
+					"action" : "inventory",
+					"item": "Key",
+					"amount": 2
+				}
+			
+			] 
+		},
+		{
+			"action": "PathFinding",
+			"target_path": "MapFeatures/NextLevel", 
+			"conditions": [
+				{
+					"action" : "inventory",
+					"item": "Key",
+					"amount": 1
+				}
+			
+			] 
+		}
+	]
+}

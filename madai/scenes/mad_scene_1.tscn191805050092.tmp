@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://br5q3y65c06p3"]
+
+[ext_resource type="PackedScene" uid="uid://dumuafiu812e7" path="res://scenes/mad_scene.tscn" id="1_afdja"]
+[ext_resource type="PackedScene" uid="uid://c13o0hmjdl0to" path="res://scenes/mad_fox_bot.tscn" id="2_sf1cb"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_afdja"]
+vertices = PackedVector2Array(80, 545, 80, 112.047, 618, 114.938, 618, 195.023, 1061.97, 545.977, 1061.02, 194.023)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(70, 102, 628, 105, 628, 185, 1071, 184, 1072, 556, 70, 555)])
+
+[node name="MadScene1" instance=ExtResource("1_afdja")]
+
+[node name="Key1" parent="Keys" index="0"]
+position = Vector2(112, 320)
+
+[node name="Key2" parent="Keys" index="1"]
+position = Vector2(574, 542)
+
+[node name="NextLevel" parent="MapFeatures" index="0"]
+target = "uid://br5q3y65c06p3"
+
+[node name="Region1" type="NavigationRegion2D" parent="MapFeatures" index="1"]
+navigation_polygon = SubResource("NavigationPolygon_afdja")
+
+[node name="MadFoxBot" parent="." index="4" instance=ExtResource("2_sf1cb")]
+position = Vector2(140, 165)
+manual_control_enabled = true
+
+[editable path="MadFoxBot"]

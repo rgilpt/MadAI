@@ -1,0 +1,143 @@
+[gd_scene load_steps=18 format=3 uid="uid://c13o0hmjdl0to"]
+
+[ext_resource type="Script" uid="uid://cnovxn86cm82d" path="res://character_body_2d.gd" id="1_niwki"]
+[ext_resource type="Texture2D" uid="uid://cnh6537370q31" path="res://assets/icon.svg" id="2_h1bt7"]
+[ext_resource type="Script" uid="uid://v25y1dsvqqon" path="res://scripts/AI/Primary/action_selection_component.gd" id="3_c4v6c"]
+[ext_resource type="Script" uid="uid://dcebxx740mwqv" path="res://scripts/AI/Secondary/finite_state_machine.gd" id="3_h1bt7"]
+[ext_resource type="PackedScene" uid="uid://dkqv43yht4dv4" path="res://scenes/Sensors/camera_mk_1.tscn" id="3_jh1te"]
+[ext_resource type="Script" uid="uid://bg8cljyld26u1" path="res://scripts/AI/Primary/sequence_states.gd" id="3_l0dcj"]
+[ext_resource type="Script" uid="uid://b4x440ie82k7p" path="res://scripts/AI/Secondary/fsm_idle.gd" id="4_l2fl4"]
+[ext_resource type="Script" uid="uid://l4r4w5vbu1un" path="res://scripts/AI/Secondary/fsm_pathfinding.gd" id="4_ugpxt"]
+[ext_resource type="Script" uid="uid://8q0qe6qqqrxy" path="res://scripts/AI/memory_locations.gd" id="8_5emgl"]
+
+[sub_resource type="Gradient" id="Gradient_vspwf"]
+offsets = PackedFloat32Array(0, 0.584507, 1)
+colors = PackedColorArray(0.137255, 0.0784314, 0.137255, 1, 0.168808, 0.535156, 0.129299, 1, 0.247377, 1, 0.244163, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_85qa8"]
+gradient = SubResource("Gradient_vspwf")
+width = 32
+height = 4
+
+[sub_resource type="Gradient" id="Gradient_85qa8"]
+offsets = PackedFloat32Array(0, 0.647887)
+colors = PackedColorArray(0.137255, 0.0784314, 0.137255, 1, 0.457776, 0.513892, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dmmc1"]
+gradient = SubResource("Gradient_85qa8")
+width = 32
+height = 4
+
+[sub_resource type="Gradient" id="Gradient_pysru"]
+offsets = PackedFloat32Array(0, 0.647887)
+colors = PackedColorArray(0.137255, 0.0784314, 0.137255, 1, 1, 0.14707, 0.124686, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0331x"]
+gradient = SubResource("Gradient_pysru")
+width = 32
+height = 4
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vspwf"]
+size = Vector2(32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vspwf"]
+radius = 22.0
+
+[node name="MadFoxBot" type="CharacterBody2D"]
+script = ExtResource("1_niwki")
+
+[node name="Health" type="TextureProgressBar" parent="."]
+offset_left = -16.0
+offset_top = -34.0
+offset_right = 48.0
+offset_bottom = 30.0
+value = 100.0
+texture_progress = SubResource("GradientTexture2D_85qa8")
+
+[node name="Energy" type="TextureProgressBar" parent="."]
+offset_left = -16.0
+offset_top = -28.0
+offset_right = 48.0
+offset_bottom = 36.0
+value = 100.0
+texture_progress = SubResource("GradientTexture2D_dmmc1")
+
+[node name="Ammo" type="TextureProgressBar" parent="."]
+offset_left = -16.0
+offset_top = -22.0
+offset_right = 48.0
+offset_bottom = 42.0
+value = 100.0
+texture_progress = SubResource("GradientTexture2D_0331x")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_h1bt7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vspwf")
+
+[node name="CollectableArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectableArea"]
+shape = SubResource("CircleShape2D_vspwf")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+position_smoothing_speed = 2.0
+
+[node name="Hardware" type="Node2D" parent="."]
+
+[node name="Sensors" type="Node2D" parent="Hardware"]
+
+[node name="CameraMK1" parent="Hardware/Sensors" instance=ExtResource("3_jh1te")]
+range = 150.0
+
+[node name="Actuators" type="Node2D" parent="Hardware"]
+
+[node name="AI" type="Node2D" parent="."]
+
+[node name="Primary" type="Node2D" parent="AI"]
+script = ExtResource("3_c4v6c")
+
+[node name="SequenceStates" type="Node" parent="AI/Primary" node_paths=PackedStringArray("actor", "finite_state_machine")]
+script = ExtResource("3_l0dcj")
+actor = NodePath("../../..")
+finite_state_machine = NodePath("../../Secondary/FiniteStateMachine")
+metadata/_custom_type_script = "uid://bg8cljyld26u1"
+
+[node name="ActionSelectionComponent" type="Node" parent="AI/Primary" node_paths=PackedStringArray("actor", "finite_state_machine", "memory_locations")]
+script = ExtResource("3_c4v6c")
+actor = NodePath("../../..")
+finite_state_machine = NodePath("../../Secondary/FiniteStateMachine")
+memory_locations = NodePath("../../MemoryLocations")
+metadata/_custom_type_script = "uid://v25y1dsvqqon"
+
+[node name="Secondary" type="Node2D" parent="AI"]
+
+[node name="FiniteStateMachine" type="Node" parent="AI/Secondary" node_paths=PackedStringArray("actor")]
+script = ExtResource("3_h1bt7")
+actor = NodePath("../../..")
+metadata/_custom_type_script = "uid://dcebxx740mwqv"
+
+[node name="FSMIdle" type="Node" parent="AI/Secondary/FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("4_l2fl4")
+actor = NodePath("../../../..")
+metadata/_custom_type_script = "uid://b4x440ie82k7p"
+
+[node name="FSMPathFinding" type="Node" parent="AI/Secondary/FiniteStateMachine" node_paths=PackedStringArray("actor", "navigation_agent")]
+script = ExtResource("4_ugpxt")
+actor = NodePath("../../../..")
+navigation_agent = NodePath("../../../../NavigationAgent2D")
+metadata/_custom_type_script = "uid://l4r4w5vbu1un"
+
+[node name="MemoryLocations" type="Node" parent="AI"]
+script = ExtResource("8_5emgl")
+metadata/_custom_type_script = "uid://8q0qe6qqqrxy"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[connection signal="body_entered" from="CollectableArea" to="." method="_on_area_2d_body_entered"]

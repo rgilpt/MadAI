@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=3 uid="uid://br5q3y65c06p3"]
+
+[ext_resource type="PackedScene" uid="uid://dumuafiu812e7" path="res://scenes/mad_scene.tscn" id="1_afdja"]
+[ext_resource type="PackedScene" uid="uid://c13o0hmjdl0to" path="res://scenes/mad_fox_bot.tscn" id="2_sf1cb"]
+[ext_resource type="Script" uid="uid://dqrq3gp0h7a2v" path="res://scenes/mad_scene_1.gd" id="2_x5drn"]
+[ext_resource type="Script" uid="uid://bvyirnh5blhiu" path="res://scripts/key.gd" id="3_s6an2"]
+[ext_resource type="Texture2D" uid="uid://ys7p04448sc" path="res://assets/key.png" id="4_psodh"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dmmc1"]
+radius = 5.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_afdja"]
+vertices = PackedVector2Array(80, 545, 80, 112.047, 618, 114.938, 618, 195.023, 1061.97, 545.977, 1061.02, 194.023)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(70, 102, 628, 105, 628, 185, 1071, 184, 1072, 556, 70, 555)])
+
+[node name="MadScene1" instance=ExtResource("1_afdja")]
+script = ExtResource("2_x5drn")
+
+[node name="Key1" parent="Keys" index="0"]
+position = Vector2(112, 320)
+
+[node name="Key2" parent="Keys" index="1"]
+position = Vector2(574, 542)
+
+[node name="Key3" type="StaticBody2D" parent="Keys" index="2" groups=["Collect"]]
+position = Vector2(258, 215)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_s6an2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Keys/Key3" index="0"]
+texture_filter = 1
+texture = ExtResource("4_psodh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Keys/Key3" index="1"]
+position = Vector2(-1, -4)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_dmmc1")
+
+[node name="Key4" type="StaticBody2D" parent="Keys" index="3" groups=["Collect"]]
+position = Vector2(807, 429)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_s6an2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Keys/Key4" index="0"]
+texture_filter = 1
+texture = ExtResource("4_psodh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Keys/Key4" index="1"]
+position = Vector2(-1, -4)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_dmmc1")
+
+[node name="Key5" type="StaticBody2D" parent="Keys" index="4" groups=["Collect"]]
+position = Vector2(722, 271)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_s6an2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Keys/Key5" index="0"]
+texture_filter = 1
+texture = ExtResource("4_psodh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Keys/Key5" index="1"]
+position = Vector2(-1, -4)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_dmmc1")
+
+[node name="NextLevel" parent="MapFeatures" index="0"]
+target = "uid://br5q3y65c06p3"
+
+[node name="Region1" type="NavigationRegion2D" parent="MapFeatures" index="1"]
+navigation_polygon = SubResource("NavigationPolygon_afdja")
+
+[node name="MadFoxBot" parent="." index="4" instance=ExtResource("2_sf1cb")]
+position = Vector2(140, 166)
+manual_control_enabled = true
+
+[node name="ActionSelectionComponent" parent="MadFoxBot/AI/Primary" index="1" node_paths=PackedStringArray("change_level")]
+change_level = NodePath("../../../../MapFeatures/NextLevel")
+
+[editable path="MadFoxBot"]
